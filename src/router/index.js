@@ -1,3 +1,8 @@
+/*
+ * @Author: Lvhz
+ * @Date: 2020-04-12 14:54:11
+ * @Descripttion: 
+ */
 import Vue from 'vue';
 import Router from 'vue-router'; // npm i vue-router -S
 
@@ -16,8 +21,9 @@ const constantRouterMap = [
   }
 ]
 
+console.log(process.env.VUE_APP_BASEURL);
 export default new Router({
-  // base: process.env.VUE_APP_BASEURL,
+  base: process.env.VUE_APP_BASEURL,
   mode: 'hash',
   routes: constantRouterMap
 });

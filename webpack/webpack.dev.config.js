@@ -3,6 +3,7 @@
 
 const path = require('path')
 const Webpack = require('webpack')
+const readEnv = require('../env/readEnv.js')
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
@@ -101,7 +102,10 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new Webpack.DefinePlugin({ // 编译时配置的全局变量
-      'process.env': require('../env/development') //当前环境为开发环境
+      'process.env': readEnv('../env/development') //当前环境为开发环境
+      // 'process.env': {
+      //   NODE_ENV: "'development'"
+      // }
     }),
   ]
 }

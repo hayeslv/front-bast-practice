@@ -1,0 +1,4 @@
+VUE_APP_TITLE="前端最佳实践（Vue）"
+VUE_APP_ENV="production"
+VUE_APP_BASEURL="/pro"
+VUE_APP_API_URL="/"

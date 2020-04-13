@@ -1,6 +1,12 @@
+/*
+ * @Author: Lvhz
+ * @Date: 2020-04-12 09:07:23
+ * @Descripttion: 
+ */
 import init from './init.js';
 import { isValidBrowser } from '@/utils/webkitAuth.js'; //浏览器版本检测
 
+console.log(process.env, '环境变量')
 
 if(isValidBrowser){
   init.initApp()
