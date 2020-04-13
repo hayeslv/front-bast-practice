@@ -2,24 +2,52 @@
 // 所以要使用CommonJS规范导出一个对象
 
 const path = require('path')
+const Webpack = require('webpack')
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
+const resolve = dir => path.resolve(__dirname, `../${dir}`)
+
+
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: "./src/main.js",
   output: {
     // 输出路径，必须是绝对路径
-    path: path.resolve(__dirname, "../dist"),
-    filename: "main.js"
+    path: path.resolve(__dirname, "./dist"),
+    filename: "main.js",
+    publicPath: process.env.VUE_APP_BASEURL,
   },
   // 开发：development，生产：production。开发模式下，代码不会被压缩，便于调试
   mode: "development", 
   // 代码的映射关系，生产环境设置为none
-  devtool: "source-map", // source-map、none、inline-source-map
+  devtool: "inline-source-map", // source-map、none、inline-source-map
+  devServer: {
+    contentBase: "./dist", // 服务器启动后的服务地址，这里启动后就可以访问 dist 目录下的资源了
+    port: 8081,
+    open: true, // 当服务启动之后，自动打开浏览器
+    proxy: { // 代理
+      "/api": {
+        target: "http://localhost:9092"
+      }
+    }
+  },
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      '@': resolve('src')
+    }
+  },
   // 处理模块
   module: {
     rules: [ // 做检测用：.css .png .ts等等
+      // 处理vue文件：官方文档 https://vue-loader.vuejs.org/zh/guide/#vue-cli
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
       // 处理图片：npm i file-loader -D
       {
         test: /\.(png|jpe?g|gif)$/,
@@ -70,6 +98,10 @@ module.exports = {
     // 将css以独立文件的方式抽离出来
     new MiniCssExtractPlugin({ // npm i mini-css-extract-plugin -D
       filename: "[name]_[chunkhash:8].css"
-    })
+    }),
+    new VueLoaderPlugin(),
+    new Webpack.DefinePlugin({ // 编译时配置的全局变量
+      'process.env': require('../env/development') //当前环境为开发环境
+    }),
   ]
 }
