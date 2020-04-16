@@ -1,4 +1,8 @@
-// mock接口 mock数据
+/*
+ * @Author: Lvhz
+ * @Date: 2020-04-11 22:20:02
+ * @Descripttion: mock接口 mock数据
+ */
 const express = require("express")
 
 const app = express()
@@ -9,6 +13,6 @@ app.get('/api/info', (req, res)=>{
   })
 })
 
-app.listen("9092", ()=>{
-  console.log('app listen success in 9092');
+app.listen("3000", ()=>{
+  console.log('app listen success in 3000');
 })

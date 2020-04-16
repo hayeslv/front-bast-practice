@@ -1,3 +1,8 @@
+<!--
+ * @Author: Lvhz
+ * @Date: 2020-04-11 16:18:46
+ * @Descripttion: 
+ -->
 ## Webpack  
 
 &emsp;&emsp;webpack是一个打包模块化Javascript的工具，它会从入口模块出发，识别源码中的模块化导入语句，递归地找出入口文件中的所有依赖，将入口和其所有的依赖打包到一个单独的文件中。  
@@ -46,4 +51,44 @@ webpack不适合用于Javascript库的构建，因为不够纯粹。一般使用
 <br>
 
 ### Plugins  
-&emsp;&emsp;plugin 可以在webpack运行到某个阶段的时候，帮你做一些事情，类似于生命周期的概念扩展插件。在webpack构建流程中的特定时机注入扩展逻辑来改变构建结果或你想要做的事情。作用于整个构建过程。
+&emsp;&emsp;plugin 可以在webpack运行到某个阶段的时候，帮你做一些事情，类似于生命周期的概念扩展插件。在webpack构建流程中的特定时机注入扩展逻辑来改变构建结果或你想要做的事情。作用于整个构建过程。  
+
+### WebpackDevServer  
+&emsp;&emsp;每次修改完代码都需要重新打包一次，打开浏览器，刷新一次，很麻烦。我们可以使用webpackdevserver来改善这块的体验。
+
+* 安装  
+```
+npm i webpack-dev-server -D
+```
+
+### 多页面打包  
+1、修改entry  
+```
+entry: {
+  list: "./webpack/multiPageBuild/list.js",
+  detail: "./webpack/multiPageBuild/detail.js"
+},
+```  
+2、修改output的filename  
+```
+output: {
+  // 输出路径，必须是绝对路径
+  path: resolve("dist"),
+  // filename: "main.js", // 单页面打包输出
+  filename: "[name].js", // 多页面打包输出
+  publicPath: process.env.VUE_APP_BASEURL,
+},
+```  
+3、修改HtmlWebpackPlugin（每多一个打包的页面，就多一个plugin）  
+```
+new HtmlWebpackPlugin({
+  template: "./public/index.html",
+  filename: "list.html",
+  chunks: ["list"]
+}),
+new HtmlWebpackPlugin({
+  template: "./public/index.html",
+  filename: "detail.html",
+  chunks: ["detail"]
+}),
+```

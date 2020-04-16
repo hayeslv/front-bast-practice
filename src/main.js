@@ -1,8 +1,10 @@
 /*
  * @Author: Lvhz
  * @Date: 2020-04-12 09:07:23
- * @Descripttion: 
+ * @Descripttion: 入口
  */
+// import '@babel/polyfill'
+
 import init from './init.js';
 import { isValidBrowser } from '@/utils/webkitAuth.js'; //浏览器版本检测
 

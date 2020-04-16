@@ -6,8 +6,7 @@
 body{
   font-family: "webfont" !important;
   font-size: 30px;
-  background: red;
 }
-#root{
-  background-color: #fff;
+div{
+  color: blue;
 }

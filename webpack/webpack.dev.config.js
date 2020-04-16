@@ -14,24 +14,30 @@ const resolve = dir => path.resolve(__dirname, `../${dir}`)
 
 
 module.exports = {
-  entry: "./src/main.js",
+  entry: "./src/main.js", // 单页面打包
+  // entry: { // 多页面打包
+  //   list: "./src/mpa/list",
+  //   detail: "./src/mpa/detail"
+  // },
   output: {
     // 输出路径，必须是绝对路径
-    path: path.resolve(__dirname, "./dist"),
-    filename: "main.js",
+    path: resolve("dist"),
+    // filename: "main.js", // 单页面打包输出
+    filename: "[name].js", // 单页面多页面都可以用：打包输出
     publicPath: process.env.VUE_APP_BASEURL,
   },
   // 开发：development，生产：production。开发模式下，代码不会被压缩，便于调试
   mode: "development", 
   // 代码的映射关系，生产环境设置为none
-  devtool: "inline-source-map", // source-map、none、inline-source-map
+  // devtool: "inline-source-map", // source-map、none、inline-source-map
   devServer: {
     contentBase: "./dist", // 服务器启动后的服务地址，这里启动后就可以访问 dist 目录下的资源了
-    port: 8081,
-    open: true, // 当服务启动之后，自动打开浏览器
+    port: 8080,
+    // open: true, // 当服务启动之后，自动打开浏览器
+    hotOnly: true, // 开启热模块更新
     proxy: { // 代理
       "/api": {
-        target: "http://localhost:9092"
+        target: "http://localhost:3000"
       }
     }
   },
@@ -51,13 +57,17 @@ module.exports = {
       },
       // 处理图片：npm i file-loader -D
       {
-        test: /\.(png|jpe?g|gif)$/,
+        test: /\.(png|jpe?g|gif|svg)$/,
         // use: ["file-loader"] // 单独使用loader时的写法
         use: [{ // 需要使用options时的写法
-          loader: "file-loader",
+          // loader: "file-loader",
+          // options: {
+          //   name: "[name]_[hash:8].[ext]",
+          //   outputPath: "images/" // 会在dist目录下创建一个images文件夹，图片都会放在里面，方便统一管理
+          // },
+          loader: "url-loader",
           options: {
-            name: "[name]_[hash:8].[ext]",
-            outputPath: "images/" // 会在dist目录下创建一个images文件夹，图片都会放在里面，方便统一管理
+            limit: 10000, // 图片小于10000字节（约10K）时以base64的方式引用
           }
         }]
       },
@@ -86,15 +96,34 @@ module.exports = {
 
         // 这里是将css抽离独立文件的方式
         use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"]
+      },
+      // es6转码：npm i babel-loader @babel-core @babel/preset-env -D
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
       }
     ]
   },
   plugins: [
     // 可以开启缓存、压缩等操作
+    // 单页面打包
     new HtmlWebpackPlugin({ // npm i html-webpack-plugin -D
       template: "./public/index.html",
       filename: "index.html"
     }),
+    // new HtmlWebpackPlugin({ // 多页面打包
+    //   template: "./public/index.html",
+    //   filename: "list.html",
+    //   chunks: ["list"]
+    // }),
+    // new HtmlWebpackPlugin({ // 多页面打包
+    //   template: "./public/index.html",
+    //   filename: "detail.html",
+    //   chunks: ["detail"]
+    // }),
     new CleanWebpackPlugin(), // npm i clean-webpack-plugin -D
     // 将css以独立文件的方式抽离出来
     new MiniCssExtractPlugin({ // npm i mini-css-extract-plugin -D
@@ -103,9 +132,7 @@ module.exports = {
     new VueLoaderPlugin(),
     new Webpack.DefinePlugin({ // 编译时配置的全局变量
       'process.env': readEnv('../env/development') //当前环境为开发环境
-      // 'process.env': {
-      //   NODE_ENV: "'development'"
-      // }
     }),
+    new Webpack.HotModuleReplacementPlugin() // 热模块更新
   ]
 }
