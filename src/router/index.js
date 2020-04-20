@@ -16,6 +16,12 @@ const constantRouterMap = [
     component: () => import('@/view/modifier/index.vue')
   },
   {
+    // vue使用
+    name: 'use',
+    path: '/use',
+    component: () => import('@/view/use/index.vue')
+  },
+  {
     path: '/',
     component: () => import('@/view/modifier/index.vue')
   }
