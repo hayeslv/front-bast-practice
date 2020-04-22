@@ -28,6 +28,9 @@
 import EInput from './EInput.vue'
 import EFormItem from './EFormItem'
 import EForm from './EForm'
+import Notice from '../Notice'
+import create from '@/utils/createComp/create.js'
+// import 
 export default {
   components: {
     EInput,
@@ -50,9 +53,19 @@ export default {
     login(){
       this.$refs.form.validate((isValid)=>{
         if(isValid){
-          alert('登录·~~')
+          create(Notice, {
+            title: 'xxx',
+            message: '登录',
+            duration: 1000
+          }).show()
+          // alert('登录·~~')
         }else{
-          alert('有错！！！')
+          // alert('有错！！！')
+          create(Notice, {
+            title: 'xxx',
+            message: '失败！！！',
+            duration: 1000
+          }).show()
         }
       })
     }

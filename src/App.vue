@@ -5,8 +5,8 @@
  -->
 <template>
   <div>
-    <!-- <router-view></router-view> -->
-    <EForm></EForm>
+    <router-view></router-view>
+    <!-- <EForm></EForm> -->
   </div>
 </template>
 

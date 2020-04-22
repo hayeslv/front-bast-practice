@@ -61,6 +61,34 @@ webpack不适合用于Javascript库的构建，因为不够纯粹。一般使用
 npm i webpack-dev-server -D
 ```
 
+### Babel处理ES6  
+&emsp;&emsp;Babel是Javascript编译器，能将ES6代码转换成ES5代码，让我们开发过程中放心使用JS新特性而不用担心兼容性问题。并且还可以通过插件机制根据需求灵活的扩展。  
+&emsp;&emsp;Babel在执行编译的过程中，会从项目根目录下的 .babelrc JSON文件中读取配置。没有该文件则会从loader中的options中读取配置。  
+
+#### 安装  
+
+```
+npm i babel-loader @babel-core @babel/preset-env -D
+```
+
+* babel-loader是webpack与babel的通信桥梁，不会做把es6转成es5的工作，这部分工作需要用到@babel/preset-env来做
+* @babel/preset-env（面向未来的转换规则） 里包含了es6,7,8 转es5的转换规则
+
+&emsp;&emsp;默认的Babel只支持let等一些基础的特性转换，Promise等一些还没有转换过来，这时候需要借助 @babel/polyfill，把es的新特性都装进来，来弥补低版本浏览器中缺失的特性。  
+```
+npm i @babel/polyfill -S
+```  
+
+#### 按需加装，减少冗余  
+&emsp;&emsp;会发现打包的体积大了很多，这是因为polyfill默认会把所有特性注入进来，可以让我用到的es6+才会注入，没用到的不注入，从而减少打包体积。  
+&emsp;&emsp;useBuiltIns 选项是babel7 的新功能，这个选项告诉babel如何配置 @babel/polyfill。它有三个参数可以使用：
+
+* entry：需要在webpack的入口文件里 import "@babel/polyfill" 一次。babel会根据你的使用情况导入垫片，没有使用的功能不会被导入相应的垫片。
+* usage（推荐使用）：不需要import，全自动检测，但是要安装 @babel/polyfill 。（试验阶段）
+* false（不推荐）：如果你 import "@babel/polyfill" ，它不会排除没有使用的垫片，程序体积会庞大。  
+
+注意：usage的行为类似babel-transform-runtime，不会造成全局污染，因此也不会对类似 Array.prototype.include() 进行polyfill。
+
 ### 多页面打包  
 1、修改entry  
 ```

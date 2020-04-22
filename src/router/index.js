@@ -22,6 +22,12 @@ const constantRouterMap = [
     component: () => import('@/view/use/index.vue')
   },
   {
+    // css使用
+    name: 'cssUse',
+    path: '/cssUse',
+    component: () => import('@/view/cssUse/index.vue')
+  },
+  {
     path: '/',
     component: () => import('@/view/modifier/index.vue')
   }
