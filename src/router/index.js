@@ -5,10 +5,19 @@
  */
 import Vue from 'vue';
 import Router from 'vue-router'; // npm i vue-router -S
+import Detail from '@/view/routerUse/detail.vue';
 
 Vue.use(Router);
 
+
+
+
+
 const constantRouterMap = [
+  {
+    path: '/',
+    component: () => import('@/view/modifier/index.vue')
+  },
   {
     // 修饰符
     name: 'vueModifier',
@@ -28,15 +37,35 @@ const constantRouterMap = [
     component: () => import('@/view/cssUse/index.vue')
   },
   {
-    path: '/',
-    component: () => import('@/view/modifier/index.vue')
+    // route使用
+    name: 'routeUse',
+    path: '/routeUse',
+    meta: { auth: true }, // 自定义属性--需要认证
+    beforeEnter(){}, // 路由级守卫
+    component: () => import('@/view/routerUse/index.vue'),
+    children: [
+      { 
+        path: '/detail/:id', 
+        component: Detail,
+        props: true, // 这里设置为true，则id会以props属性的方式传入
+      }
+    ]
   }
 ]
 
 console.log(process.env.VUE_APP_BASEURL);
-export default new Router({
-  base: process.env.VUE_APP_BASEURL,
-  mode: 'hash',
+
+const router = new Router({
+  mode: 'history',
+  // base: process.env.VUE_APP_BASEURL,
   routes: constantRouterMap
 });
+
+// 全局守卫
+router.beforeEach((to, from, next) => {
+  to.meta.auth && (alert('验证登录'))
+  next()
+})
+
+export default router
 

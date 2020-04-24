@@ -39,6 +39,9 @@ module.exports = {
       "/api": {
         target: "http://localhost:3000"
       }
+    },
+    historyApiFallback: { // vue-router设置了history模式时，必须设置这里
+      index: '/index.html'
     }
   },
   resolve: {

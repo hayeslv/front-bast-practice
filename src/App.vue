@@ -5,18 +5,20 @@
  -->
 <template>
   <div>
+    <router-link to="/use">use</router-link>
+    <router-link to="/cssUse">cssuse</router-link>
     <router-view></router-view>
-    <!-- <EForm></EForm> -->
+    <!-- <ETree></ETree> -->
   </div>
 </template>
 
 <script>
-import EForm from '@/component/EForm'
+// import ETree from '@/component/Tree'
 export default {
   name: 'app',
-  components: {
-    EForm
-  },
+  // components: {
+  //   ETree
+  // },
   data() {
     return {
     };
