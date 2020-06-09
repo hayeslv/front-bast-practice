@@ -1,3 +1,8 @@
+/*
+ * @Author: Lvhz
+ * @Date: 2020-04-12 09:13:47
+ * @Descripttion: 
+ */
 import Bowser from 'bowser';
 
 // 验证浏览器版本
